@@ -1,0 +1,46 @@
+<resources>
+    <string name="app_name">BestFriend</string>
+
+    <string name="email_hint">Email</string>
+    <string name="password_hint">Password</string>
+
+    <string name="sign_in_with_google_content_description">Sign in with Google button</string>
+    <string name="sign_up_content_description">Sign up or sign in button</string>
+    <string name="sign_up_content_description_2">Sign up for new account button</string>
+    <string name="loading">Please wait&#8230;</string>
+    <string name="loading_2">Please wait while connecting to database&#8230;</string>
+    <string name="log_in_button_content_description">Log in to existing account button</string>
+
+    <string name="save_button">Save</string>
+    <string name="cancel_button">Cancel</string>
+    <string name="divorced_radioButton">Divorced</string>
+    <string name="unmarried_radioButton">Unmarried</string>
+    <string name="married_radioButton">Married</string>
+    <string name="marital_status_textView">Marital\nStatus</string>
+    <string name="other_radioButton">Other</string>
+    <string name="female_radioButton">Female</string>
+    <string name="male_radioButton">Male</string>
+    <string name="gender_textView">Select\nGender</string>
+    <string name="contact_no_editText">Contact no</string>
+    <string name="password_editText">Password</string>
+    <string name="date_of_birth_editText">Date of Birth</string>
+    <string name="email_editText">Email</string>
+    <string name="username_editText">Username</string>
+    <string name="personal_account_textView">Personal Account</string>
+
+    <string name="title_activity_personal_account">PersonalAccountActivity</string>
+    <string name="title_activity_question_stream">QuestionStreamActivity</string>
+    <string name="title_activity_ask_me">AskMeActivity</string>
+    <string name="title_activity_comment">CommentActivity</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_share">Share</string>
+    <string name="action_exit">Exit</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="tell_me_all_about_it">Tell me all about it&#8230;</string>
+
+</resources>

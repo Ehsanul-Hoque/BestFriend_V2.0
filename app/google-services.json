@@ -1,0 +1,65 @@
+{
+  "project_info": {
+    "project_number": "674601202538",
+    "firebase_url": "https://fir-bestfriend.firebaseio.com",
+    "project_id": "firebase-bestfriend",
+    "storage_bucket": "firebase-bestfriend.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:674601202538:android:ae176bcee2550319",
+        "android_client_info": {
+          "package_name": "com.sprinjinc.bestfriend"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "674601202538-bufhhfr5thans5qeq7nl2lf9kvatbnd8.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "674601202538-6f5g0951ou43d1gc0rnda3fda87dsjfq.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "674601202538-eq5gpb659a9donedmhbr1mngka7frrhu.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.sprinjinc.bestfriend",
+            "certificate_hash": "321be816bfceb645ae65edd39a4fbaf79484564d"
+          }
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAk_998P1XYvJd3IepY4_WgMNtuQw6olvc"
+        },
+        {
+          "current_key": "AIzaSyAMppSRQllWqtS0XsE-ECaHJqUnqNHr2ug"
+        },
+        {
+          "current_key": "AIzaSyBjRbmoyqDWPjo4bHAmGIyrdoKZYGfrbkw"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "674601202538-bufhhfr5thans5qeq7nl2lf9kvatbnd8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

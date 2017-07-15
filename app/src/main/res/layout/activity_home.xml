@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:facebook="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/home_background"
+    android:orientation="vertical"
+    tools:context="com.sprinjinc.bestfriend.HomeActivity"
+    android:weightSum="100" >
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="10" />
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="25"
+        android:scaleType="fitCenter"
+        app:srcCompat="@drawable/bestfriend_logo"
+        tools:ignore="ContentDescription" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="10" />
+
+    <ImageButton
+        android:id="@+id/imageButton_mailLogIn"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="9"
+        android:layout_gravity="center"
+        android:scaleType="fitCenter"
+        android:background="@null"
+        android:src="@drawable/sign_in_with_google"
+        android:contentDescription="@string/sign_in_with_google_content_description" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2.5" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="6"
+        android:layout_gravity="center"
+        android:src="@drawable/create_account_prompt"
+        tools:ignore="ContentDescription" />
+
+    <ImageButton
+        android:id="@+id/imageButton_signUp"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="9"
+        android:layout_gravity="center"
+        android:scaleType="fitCenter"
+        android:background="@null"
+        android:src="@drawable/sign_up"
+        android:contentDescription="@string/sign_up_content_description" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="12" />
+
+    <TextView
+        android:id="@+id/textView_agreement"
+        android:layout_width="200dp"
+        android:layout_height="0dp"
+        android:layout_weight="16.5"
+        android:layout_gravity="center"
+        android:textColor="#FFFFFF"
+        android:textAlignment="center"
+        android:textSize="15sp" />
+
+</LinearLayout>

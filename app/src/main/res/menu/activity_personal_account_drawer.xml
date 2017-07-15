@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_ask_me"
+            android:icon="@drawable/ic_ask_me_1"
+            android:title="Tell me about it" />
+        <item
+            android:id="@+id/nav_question_stream"
+            android:icon="@drawable/ic_question_answer_black_24dp"
+            android:title="Question stream" />
+        <item
+            android:id="@+id/nav_about"
+            android:icon="@drawable/ic_about_bestfriend"
+            android:title="About Bestfriend app" />
+        <item
+            android:id="@+id/nav_support"
+            android:icon="@drawable/ic_support_2"
+            android:title="Support" />
+
+        <item
+            android:id="@+id/nav_sign_out"
+            android:icon="@drawable/ic_power_settings_new_black_24dp"
+            android:title="Sign out" />
+    </group>
+
+</menu>

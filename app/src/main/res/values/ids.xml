@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item type="id" value="Integer_1" name="loveButtonCurrentItemID"/>
+    <item type="id" value="Integer_2" name="loveButtonCurrentItemPosition"/>
+
+    <item type="id" value="Integer_3" name="commentButtonCurrentItemID"/>
+    <item type="id" value="Integer_4" name="commentButtonCurrentItemPosition"/>
+    <item type="id" value="Integer_5" name="commentButtonCurrentItemStatus"/>
+
+    <item type="id" value="Integer_6" name="shareButtonCurrentItemID"/>
+    <item type="id" value="Integer_7" name="shareButtonCurrentItemPosition"/>
+</resources>
