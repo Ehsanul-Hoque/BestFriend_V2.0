@@ -24,6 +24,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -73,24 +74,43 @@ public class CommentActivity extends AppCompatActivity implements View.OnClickLi
         showProgressDialog();
 
         // Get current user info
-        mDatabaseRef.child("users").child(currentFirebaseUser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+        mDatabaseRef.child("users").child(currentFirebaseUser.getUid()).child("username").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    _username = dataSnapshot.getValue().toString();
+                } else {
+                    Toast.makeText(CommentActivity.this, "Failed to get username.", Toast.LENGTH_SHORT).show();
 
-                User user = dataSnapshot.getValue(User.class);
-
-                _username = user.getUsername();
-                _emailAddress = user.getEmail();
-
-                //Log.d(TAG, "User name: " + user.getName() + ", email " + user.getEmail());
+                    _username = "Android Studio";
+                }
 
                 hideProgressDialog();
             }
 
             @Override
             public void onCancelled(DatabaseError error) {
-                // Failed to read value
-                //Log.w(TAG, "Failed to read value.", error.toException());
+                Toast.makeText(CommentActivity.this, "Failed to read value.", Toast.LENGTH_SHORT).show();
+                hideProgressDialog();
+            }
+        });
+
+        mDatabaseRef.child("users").child(currentFirebaseUser.getUid()).child("email").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    _emailAddress = dataSnapshot.getValue().toString();
+                } else {
+                    Toast.makeText(CommentActivity.this, "Failed to get email.", Toast.LENGTH_SHORT).show();
+
+                    _emailAddress = "android.studio@android.com";
+                }
+
+                hideProgressDialog();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
                 Toast.makeText(CommentActivity.this, "Failed to read value.", Toast.LENGTH_SHORT).show();
                 hideProgressDialog();
             }
@@ -111,7 +131,7 @@ public class CommentActivity extends AppCompatActivity implements View.OnClickLi
         });
 
         // Get the comments
-        mDatabaseRef.child("comments").child("comments_for_post_" + post_id).addListenerForSingleValueEvent(new ValueEventListener() {
+        /*mDatabaseRef.child("comments").child("comments_for_post_" + post_id).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if(dataSnapshot.exists()){
@@ -128,10 +148,40 @@ public class CommentActivity extends AppCompatActivity implements View.OnClickLi
                 // Failed to read value
                 Toast.makeText(CommentActivity.this, "Failed to read value.", Toast.LENGTH_SHORT).show();
             }
+        });*/
+
+        mDatabaseRef.child("comments").child("comments_for_post_" + post_id).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+
+                    listView_comment.setVisibility(View.VISIBLE);
+
+                    for (DataSnapshot commentSnapshot: dataSnapshot.getChildren()) {
+                        String singleComment = commentSnapshot.getValue().toString();
+                        commentsList.add(0, singleComment);
+                    }
+
+                    ((BaseAdapter) listView_comment.getAdapter()).notifyDataSetChanged();
+                } else {
+                    listView_comment.setVisibility(View.GONE);
+                    //Toast.makeText(CommentActivity.this, "Failed to get comments or no comments.", Toast.LENGTH_SHORT).show();
+                }
+
+                hideProgressDialog();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+                Toast.makeText(CommentActivity.this, "Failed to read value.", Toast.LENGTH_SHORT).show();
+
+                hideProgressDialog();
+            }
         });
     }
 
-    private void getAllComments(Map<String, String> comments) {
+    /*private void getAllComments(Map<String, String> comments) {
         //commentsList.clear();
 
         for (Map.Entry<String, String> entry : comments.entrySet()){
@@ -141,7 +191,7 @@ public class CommentActivity extends AppCompatActivity implements View.OnClickLi
 
         //listView_Adapter.notify();
         ((BaseAdapter) listView_comment.getAdapter()).notifyDataSetChanged();
-    }
+    }*/
 
     private void showProgressDialog() {
         if (mProgressDialog == null) {
