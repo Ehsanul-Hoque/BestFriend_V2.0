@@ -102,7 +102,7 @@ public class SignUpActivity extends AppCompatActivity implements
                             // If sign in fails, display a message to the user.
                             //Log.w(TAG, "createUserWithEmail:failure", task.getException());
                             Toast.makeText(SignUpActivity.this, "Authentication failed. Check your internet connection " +
-                                    "and make sure that this email address has not registered before.", Toast.LENGTH_LONG).show();
+                                    "and make sure that this email address has not registered before. Password should be long enough.", Toast.LENGTH_LONG).show();
                             updateUI(null);
                         }
 
