@@ -118,39 +118,55 @@ public class AskMeActivity extends AppCompatActivity
 
         showProgressDialog();
 
-        mDatabaseRef.child("users").child(currentFirebaseUser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+        mDatabaseRef.child("users").child(currentFirebaseUser.getUid()).child("username").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    _username = dataSnapshot.getValue().toString();
+                } else {
+                    Toast.makeText(AskMeActivity.this, "Failed to get username.", Toast.LENGTH_SHORT).show();
 
-                User user = dataSnapshot.getValue(User.class);
-
-                _username = user.getUsername();
-                _emailAddress = user.getEmail();
-
-                textView_username_navHeader.setText(_username);
-                textView_email_navHeader.setText(_emailAddress);
-
-                //Log.d(TAG, "User name: " + user.getName() + ", email " + user.getEmail());
+                    _username = "Android Studio";
+                }
 
                 hideProgressDialog();
             }
 
             @Override
             public void onCancelled(DatabaseError error) {
-                // Failed to read value
-                //Log.w(TAG, "Failed to read value.", error.toException());
                 Toast.makeText(AskMeActivity.this, "Failed to read value.", Toast.LENGTH_SHORT).show();
                 hideProgressDialog();
             }
         });
 
+        mDatabaseRef.child("users").child(currentFirebaseUser.getUid()).child("email").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    _emailAddress = dataSnapshot.getValue().toString();
+                } else {
+                    Toast.makeText(AskMeActivity.this, "Failed to get email.", Toast.LENGTH_SHORT).show();
+
+                    _emailAddress = "android.studio@android.com";
+                }
+
+                hideProgressDialog();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                Toast.makeText(AskMeActivity.this, "Failed to read value.", Toast.LENGTH_SHORT).show();
+                hideProgressDialog();
+            }
+        });
 
         mDatabaseRef.child("post_count").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                total_post = Integer.parseInt(dataSnapshot.getValue().toString());
-
-                //Toast.makeText(AskMeActivity.this, "Total post : " + total_post, Toast.LENGTH_SHORT).show();
+                if (dataSnapshot.exists()) {
+                    total_post = Integer.parseInt(dataSnapshot.getValue().toString());
+                } else
+                    Toast.makeText(AskMeActivity.this, "Failed to get total post number.", Toast.LENGTH_SHORT).show();
 
                 hideProgressDialog();
             }
