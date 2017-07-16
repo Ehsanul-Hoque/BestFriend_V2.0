@@ -131,7 +131,7 @@ public class LogInActivity extends AppCompatActivity implements
             //Toast.makeText(LogInActivity.this, "This is LogInActivity. A user is logged in. Name : " + user.getDisplayName() + ", Email : " + user.getEmail(), Toast.LENGTH_LONG).show();
 
             Intent newsfeedIntent = new Intent(this, QuestionStreamActivity.class);
-            newsfeedIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            //newsfeedIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(newsfeedIntent);
         } else {
             //Toast.makeText(LogInActivity.this, "This is LogInActivity. No user is logged in", Toast.LENGTH_LONG).show();
