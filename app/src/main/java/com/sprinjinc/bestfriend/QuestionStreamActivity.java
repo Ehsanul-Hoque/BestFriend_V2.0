@@ -216,13 +216,13 @@ public class QuestionStreamActivity extends AppCompatActivity
         textView_username_navHeader = (TextView) navigationHeader.findViewById(R.id.textView_username_navHeader);
         textView_email_navHeader = (TextView) navigationHeader.findViewById(R.id.textView_email_navHeader);
 
-        navigationHeader.setOnClickListener(new View.OnClickListener() {
+        /*navigationHeader.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent personalAccountActivity = new Intent(QuestionStreamActivity.this, PersonalAccountActivity.class);
                 startActivity(personalAccountActivity);
             }
-        });
+        });*/
 
         showProgressDialog();
 
