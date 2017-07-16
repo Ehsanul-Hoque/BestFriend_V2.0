@@ -223,11 +223,18 @@ public class SignUpActivity extends AppCompatActivity implements
                     //String userId = mDatabaseRef.push().getKey();
 
                     // creating user object
-                    User user = new User(name, email);
+                    //User user = new User(name, email);
 
                     // pushing user to 'users' node using the userId
                     FirebaseUser firebaseUser = HomeActivity.mFirebaseAuth.getCurrentUser();
-                    mDatabaseRef.child("users").child(firebaseUser.getUid()).setValue(user);
+                    mDatabaseRef.child("users").child(firebaseUser.getUid()).child("username").setValue(name);
+                    mDatabaseRef.child("users").child(firebaseUser.getUid()).child("email").setValue(email);
+                    mDatabaseRef.child("users").child(firebaseUser.getUid()).child("contactNo").setValue("+xxxxxxxxxxxxx");
+                    mDatabaseRef.child("users").child(firebaseUser.getUid()).child("gender").setValue(Gender.MALE);
+                    mDatabaseRef.child("users").child(firebaseUser.getUid()).child("maritalStatus").setValue(MaritalStatus.UNMARRIED);
+                    mDatabaseRef.child("users").child(firebaseUser.getUid()).child("birth_year").setValue(1990);
+                    mDatabaseRef.child("users").child(firebaseUser.getUid()).child("birth_month").setValue(1);
+                    mDatabaseRef.child("users").child(firebaseUser.getUid()).child("birth_date").setValue(1);
 
                     FirebaseUser mFirebaseUser = HomeActivity.mFirebaseAuth.getCurrentUser();
                     updateUI(mFirebaseUser);
