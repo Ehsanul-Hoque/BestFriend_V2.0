@@ -11,3 +11,5 @@ Licence : MIT
 University : Bangladesh University of Engineering and Technology
 
 Country : Bangladesh
+
+Region : Region 10 (Asia and Pacific)
