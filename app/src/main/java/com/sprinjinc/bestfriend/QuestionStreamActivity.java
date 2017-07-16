@@ -64,6 +64,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -225,19 +226,28 @@ public class QuestionStreamActivity extends AppCompatActivity
 
         showProgressDialog();
 
-        mDatabaseRef.child("users").child(currentFirebaseUser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+        final String _uid = currentFirebaseUser.getUid();
+
+        /*mDatabaseRef.child("users").child(currentFirebaseUser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                User user = dataSnapshot.getValue(User.class);
+                if (dataSnapshot.exists()) {
+                    User user = dataSnapshot.getValue(User.class);
 
-                _username = user.getUsername();
-                _emailAddress = user.getEmail();
+                    /*_username = user.getUsername();
+                    _emailAddress = user.getEmail();
 
-                textView_username_navHeader.setText(_username);
-                textView_email_navHeader.setText(_emailAddress);
+                    textView_username_navHeader.setText(_username);
+                    textView_email_navHeader.setText(_emailAddress);*---/
 
 
-                //Log.d(TAG, "User name: " + user.getName() + ", email " + user.getEmail());
+                    //Log.d(TAG, "User name: " + user.getName() + ", email " + user.getEmail());
+                } else {
+                   /*Toast.makeText(QuestionStreamActivity.this, "Failed to get user information.", Toast.LENGTH_SHORT).show();
+
+                    _username = "Android Studio";
+                    _emailAddress = "android.studio@android.com";*---/
+                }
 
                 hideProgressDialog();
             }
@@ -249,14 +259,15 @@ public class QuestionStreamActivity extends AppCompatActivity
                 Toast.makeText(QuestionStreamActivity.this, "Failed to read value.", Toast.LENGTH_SHORT).show();
                 hideProgressDialog();
             }
-        });
+        });*/
 
-
-        mDatabaseRef.child("all_posts").addListenerForSingleValueEvent(new ValueEventListener() {
+        /*mDatabaseRef.child("all_posts").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists())
                     getAllPosts((Map<String,Object>) dataSnapshot.getValue());
+                else
+                    Toast.makeText(QuestionStreamActivity.this, "Failed to get posts.", Toast.LENGTH_SHORT).show();
 
                 hideProgressDialog();
             }
@@ -266,74 +277,83 @@ public class QuestionStreamActivity extends AppCompatActivity
                 // Failed to read value
                 Toast.makeText(QuestionStreamActivity.this, "Failed to read value.", Toast.LENGTH_SHORT).show();
 
+                hideProgressDialog();
+            }
+        });*/
+
+        mDatabaseRef.child("users").child(currentFirebaseUser.getUid()).child("username").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    _username = dataSnapshot.getValue().toString();
+                } else {
+                   Toast.makeText(QuestionStreamActivity.this, "Failed to get username.", Toast.LENGTH_SHORT).show();
+
+                    _username = "Android Studio";
+                }
+
+                hideProgressDialog();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                Toast.makeText(QuestionStreamActivity.this, "Failed to read value.", Toast.LENGTH_SHORT).show();
                 hideProgressDialog();
             }
         });
 
+        mDatabaseRef.child("users").child(currentFirebaseUser.getUid()).child("email").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    _emailAddress = dataSnapshot.getValue().toString();
+                } else {
+                    Toast.makeText(QuestionStreamActivity.this, "Failed to get email.", Toast.LENGTH_SHORT).show();
+
+                    _emailAddress = "android.studio@android.com";
+                }
+
+                hideProgressDialog();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                Toast.makeText(QuestionStreamActivity.this, "Failed to read value.", Toast.LENGTH_SHORT).show();
+                hideProgressDialog();
+            }
+        });
 
         mDatabaseRef.child("post_count").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                total_post = Integer.parseInt(dataSnapshot.getValue().toString());
+                if (dataSnapshot.exists()) {
+                    total_post = Integer.parseInt(dataSnapshot.getValue().toString());
 
-                //Toast.makeText(QuestionStreamActivity.this, "Total post : " + total_post, Toast.LENGTH_SHORT).show();
+                    /*int i;
 
-                /*int i;
+                    for (i = 1; i <= total_post; i++) {
+                        mDatabaseRef.child("all_posts").child("post_" + String.valueOf(i)).addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                if (dataSnapshot.exists()) {
+                                    //getAllPosts((Map<String,Object>) dataSnapshot.getValue());
+                                } else
+                                    Toast.makeText(QuestionStreamActivity.this, "Failed to get posts.", Toast.LENGTH_SHORT).show();
 
-                for (i = 1; i <= total_post; i++) {
-                    final int position = i;
-
-                    //Toast.makeText(QuestionStreamActivity.this, "Came here at least!", Toast.LENGTH_SHORT).show();
-
-                    mDatabaseRef.child("loves").child("post_" + i).child(_username).addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            // If child exists, it means the user loved the status.
-                            if (dataSnapshot.exists()) {
-                                //FeedItem item = (FeedItem) getViewByPosition(position - 1, listView);
-                                FeedItem item = (FeedItem) listView.getItemAtPosition(position - 1);
-                                item.setLovedByCurrentUser(true);
-
-                                //Toast.makeText(QuestionStreamActivity.this, item.getName() + " :: " + "Loved item position : " + String.valueOf(position - 1), Toast.LENGTH_SHORT).show();
-
-                                ImageView love_btn = (ImageView) (getViewByPosition(position - 1, listView).findViewById(R.id.imageButton_love));
-                                love_btn.setImageResource(R.drawable.love_button_clicked);
-                            } else {
-                                FeedItem item = (FeedItem) listView.getItemAtPosition(position - 1);
-                                item.setLovedByCurrentUser(false);
-
-                                //Toast.makeText(QuestionStreamActivity.this, item.getName() + " :: " + String.valueOf(position - 1) + ".", Toast.LENGTH_SHORT).show();
-                                //Toast.makeText(QuestionStreamActivity.this, "It does not exist for position " + String.valueOf(position - 1) + ".", Toast.LENGTH_SHORT).show();
+                                hideProgressDialog();
                             }
-                        }
 
-                        @Override
-                        public void onCancelled(DatabaseError error) {
-                            // Failed to read value
-                            // Toast.makeText(activity.getApplicationContext(), "Failed to read value.", Toast.LENGTH_SHORT).show();
-                        }
-                    });
-                }*/
+                            @Override
+                            public void onCancelled(DatabaseError error) {
+                                // Failed to read value
+                                Toast.makeText(QuestionStreamActivity.this, "Failed to read value.", Toast.LENGTH_SHORT).show();
 
-                /*int i;
-
-                for (i = 0; i < total_post; i++) {
-                    final int position = i;
-
-                    mDatabaseRef.child("loves").child("post_" + String.valueOf(i + 1)).child(_username).addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            // If child exists, it means the user loved the status.
-                            isLovedList[position] = dataSnapshot.exists();
-                        }
-
-                        @Override
-                        public void onCancelled(DatabaseError error) {
-                            // Failed to read value
-                            // Toast.makeText(activity.getApplicationContext(), "Failed to read value.", Toast.LENGTH_SHORT).show();
-                        }
-                    });
-                }*/
+                                hideProgressDialog();
+                            }
+                        });
+                    }*/
+                } else
+                    Toast.makeText(QuestionStreamActivity.this, "Failed to get total post number.", Toast.LENGTH_SHORT).show();
 
                 hideProgressDialog();
             }
@@ -342,6 +362,56 @@ public class QuestionStreamActivity extends AppCompatActivity
             public void onCancelled(DatabaseError error) {
                 // Failed to read value
                 Toast.makeText(QuestionStreamActivity.this, "Failed to read value.", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        mDatabaseRef.child("all_posts").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    //Map <String, Map <String, Object> > posts = new HashMap <>();
+
+                    for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
+                        int id = Integer.parseInt(postSnapshot.child("id").getValue().toString());
+                        //Toast.makeText(QuestionStreamActivity.this, "ID :: " + String.valueOf(id), Toast.LENGTH_SHORT).show();
+                        int totalComments = Integer.parseInt(postSnapshot.child("totalComments").getValue().toString());
+                        boolean lovedByCurrentUser = Boolean.valueOf(postSnapshot.child("lovedByCurrentUser").getValue().toString());
+                        String name = postSnapshot.child("name").getValue().toString();
+                        String status = postSnapshot.child("status").getValue().toString();
+                        String timeStamp = postSnapshot.child("timeStamp").getValue().toString();
+
+
+                        Map<String, Object> single_post = new HashMap<String, Object>();
+
+                        single_post.put("id", id);
+                        single_post.put("totalComments", totalComments);
+                        single_post.put("lovedByCurrentUser", lovedByCurrentUser);
+                        single_post.put("name", name);
+                        single_post.put("status", status);
+                        single_post.put("timeStamp", timeStamp);
+
+                        getSinglePost(single_post);
+
+                        //posts.put("post_" + String.valueOf(id), single_post);
+                    }
+
+                    listAdapter.notifyDataSetChanged();
+
+                    //Toast.makeText(QuestionStreamActivity.this, "status of 2nd post :: " + posts.get("post_2").get("status").toString(), Toast.LENGTH_LONG).show();
+
+                    //getAllPosts(posts);
+                } else
+                    Toast.makeText(QuestionStreamActivity.this, "Failed to get posts.", Toast.LENGTH_SHORT).show();
+
+                hideProgressDialog();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+                Toast.makeText(QuestionStreamActivity.this, "Failed to read value.", Toast.LENGTH_SHORT).show();
+
+                hideProgressDialog();
             }
         });
 
@@ -354,65 +424,8 @@ public class QuestionStreamActivity extends AppCompatActivity
                 lastFirstVisibleItem = listView.getFirstVisiblePosition();
                 lastLastVisibleItem = listView.getLastVisiblePosition();
 
-                //Toast.makeText(QuestionStreamActivity.this, "listView.getLastVisiblePosition() = " + listView.getLastVisiblePosition(), Toast.LENGTH_SHORT).show();
-
-                // If scrolling down....
-
                 lastLastVisibleItem = ((lastLastVisibleItem == -1) ? 0 : lastLastVisibleItem);
                 lastFirstVisibleItem = ((lastFirstVisibleItem == -1) ? 0 : lastFirstVisibleItem);
-
-                //if ((lastFirstVisibleItem < firstVisibleItem) || (lastLastVisibleItem < listView.getLastVisiblePosition())) {
-                    //for (i = lastLastVisibleItem; i <= listView.getLastVisiblePosition(); i++) {
-
-
-
-
-                /*}
-
-                // If scrolling up....
-
-                else if ((lastFirstVisibleItem > firstVisibleItem) || (lastLastVisibleItem > listView.getLastVisiblePosition())) {
-                    for (i = firstVisibleItem; i <= lastFirstVisibleItem; i++) {
-                        final int position = i;
-
-                        ImageView love_btn = (ImageView) (getViewByPosition(i, listView).findViewById(R.id.imageButton_love));
-                        love_btn.setImageResource(R.drawable.love_button_not_clicked);
-
-                        //Toast.makeText(QuestionStreamActivity.this, "Came here at least!", Toast.LENGTH_SHORT).show();
-
-                        mDatabaseRef.child("loves").child("post_" + String.valueOf(i + 1)).child(_username).addListenerForSingleValueEvent(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(DataSnapshot dataSnapshot) {
-                                // If child exists, it means the user loved the status.
-                                if (dataSnapshot.exists()) {
-                                    //FeedItem item = (FeedItem) getViewByPosition(position - 1, listView);
-                                    FeedItem item = (FeedItem) listView.getItemAtPosition(position);
-                                    item.setLovedByCurrentUser(true);
-
-                                    //Toast.makeText(QuestionStreamActivity.this, item.getName() + " :: " + "Loved item position : " + String.valueOf(position - 1), Toast.LENGTH_SHORT).show();
-
-                                    ImageView love_btn = (ImageView) (getViewByPosition(position, listView).findViewById(R.id.imageButton_love));
-                                    love_btn.setImageResource(R.drawable.love_button_clicked);
-                                } else {
-                                    FeedItem item = (FeedItem) listView.getItemAtPosition(position);
-                                    item.setLovedByCurrentUser(false);
-
-                                    ImageView love_btn = (ImageView) (getViewByPosition(position, listView).findViewById(R.id.imageButton_love));
-                                    love_btn.setImageResource(R.drawable.love_button_not_clicked);
-
-                                    //Toast.makeText(QuestionStreamActivity.this, item.getName() + " :: " + String.valueOf(position - 1) + ".", Toast.LENGTH_SHORT).show();
-                                    //Toast.makeText(QuestionStreamActivity.this, "It does not exist for position " + String.valueOf(position - 1) + ".", Toast.LENGTH_SHORT).show();
-                                }
-                            }
-
-                            @Override
-                            public void onCancelled(DatabaseError error) {
-                                // Failed to read value
-                                // Toast.makeText(activity.getApplicationContext(), "Failed to read value.", Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                    }
-                }*/
 
                 lastFirstVisibleItem = firstVisibleItem;
                 lastLastVisibleItem = listView.getLastVisiblePosition();
@@ -429,30 +442,17 @@ public class QuestionStreamActivity extends AppCompatActivity
 
                     int postID = (int) love_btn.getTag(R.id.loveButtonCurrentItemID);
 
-                    //Toast.makeText(QuestionStreamActivity.this, "Came here at least!", Toast.LENGTH_SHORT).show();
-
                     mDatabaseRef.child("loves").child("post_" + String.valueOf(postID)).child(_username).addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             // If child exists, it means the user loved the status.
                             if (dataSnapshot.exists()) {
-                                //FeedItem item = (FeedItem) getViewByPosition(position - 1, listView);
-                                /*FeedItem item = (FeedItem) listView.getItemAtPosition(position);
-                                item.setLovedByCurrentUser(true);*/
-
-                                //Toast.makeText(QuestionStreamActivity.this, item.getName() + " :: " + "Loved item position : " + String.valueOf(position - 1), Toast.LENGTH_SHORT).show();
-
                                 ImageButton love_btn = (ImageButton) (getViewByPosition(position, listView).findViewById(R.id.imageButton_love));
                                 love_btn.setImageResource(R.drawable.love_button_clicked);
-                            } else {
-                                /*FeedItem item = (FeedItem) listView.getItemAtPosition(position);
-                                item.setLovedByCurrentUser(false);*/
 
+                            } else {
                                 ImageButton love_btn = (ImageButton) (getViewByPosition(position, listView).findViewById(R.id.imageButton_love));
                                 love_btn.setImageResource(R.drawable.love_button_not_clicked);
-
-                                //Toast.makeText(QuestionStreamActivity.this, item.getName() + " :: " + String.valueOf(position - 1) + ".", Toast.LENGTH_SHORT).show();
-                                //Toast.makeText(QuestionStreamActivity.this, "It does not exist for position " + String.valueOf(position - 1) + ".", Toast.LENGTH_SHORT).show();
                             }
                         }
 
@@ -469,15 +469,7 @@ public class QuestionStreamActivity extends AppCompatActivity
             }
         });
 
-        /*listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String msg = "You picked " + String.valueOf(parent.getItemAtPosition(position));
 
-                Toast.makeText(QuestionStreamActivity.this, msg, Toast.LENGTH_SHORT).show();
-                if (view.getId() == ///////R.id.imageButton_love) Toast.makeText(QuestionStreamActivity.this, "Loved it!", Toast.LENGTH_LONG).show();
-            }
-        });*/
     }
 
     private void showLoved(final int position) {
@@ -792,13 +784,17 @@ public class QuestionStreamActivity extends AppCompatActivity
             }
     }
 
-    private void getAllPosts(Map<String,Object> users) {
+    /*private void getAllPosts(Map<String, Map<String, Object> > users) {
 
         //iterate through each user, ignoring their UID
-        for (Map.Entry<String, Object> entry : users.entrySet()){
+        //for (Map.Entry<String, Map > entry : users.entrySet()){
+
+        int i;
+
+        for (i = 1; i <= users.size(); i++) {
 
             //Get user map
-            Map singleUser = (Map) entry.getValue();
+            Map singleUser = (Map) users.get("post_" + i);
 
             item = new FeedItem();
 
@@ -809,32 +805,6 @@ public class QuestionStreamActivity extends AppCompatActivity
             String image = singleUser.containsKey("image") ? singleUser.get("image").toString() : null;
             item.setImage(image);
 
-            /*boolean containsImage = Boolean.parseBoolean(singleUser.get("hasImage").toString());
-            if (containsImage) {
-                item.hasImg = true;
-                String storage_image_folder = "status_images";
-
-                // Reference to an image file in Firebase Storage
-                StorageReference storageReference = FirebaseStorage.getInstance().getReference(storage_image_folder + "/" + "image_for_post_" + String.valueOf(item.getId()) + ".png");
-
-                storageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                    @Override
-                    public void onSuccess(Uri uri) {
-                        item.testImgUri = uri;
-                        Toast.makeText(QuestionStreamActivity.this, "Here's a success!!! " + item.getId() + " "  + item.getName(), Toast.LENGTH_LONG).show();
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception exception) {
-                        // Handle any errors
-                        Toast.makeText(QuestionStreamActivity.this, "Here's an error. " + item.getId() + " "  + item.getName(), Toast.LENGTH_LONG).show();
-                    }
-                });;
-
-                //Toast.makeText(QuestionStreamActivity.this, downUrl, Toast.LENGTH_LONG).show();
-            } else {
-                item.hasImg = false;
-            }*/
             item.setStatus(singleUser.get("status").toString());
             item.setTimeStamp(singleUser.get("timeStamp").toString());
 
@@ -846,6 +816,32 @@ public class QuestionStreamActivity extends AppCompatActivity
         }
 
         listAdapter.notifyDataSetChanged();
+    }*/
+
+    private void getSinglePost(Map<String, Object> single_post) {
+
+        //iterate through each user, ignoring their UID
+        //for (Map.Entry<String, Map > entry : users.entrySet()){
+
+        //Get user map
+
+        item = new FeedItem();
+
+        item.setId( Integer.parseInt(single_post.get("id").toString()) );
+        item.setName(single_post.get("name").toString());
+
+        // Image might be null sometimes
+        String image = single_post.containsKey("image") ? single_post.get("image").toString() : null;
+        item.setImage(image);
+
+        item.setStatus(single_post.get("status").toString());
+        item.setTimeStamp(single_post.get("timeStamp").toString());
+
+        // url might be null sometimes
+        String feedUrl = single_post.containsKey("url") ? single_post.get("url").toString() : null;
+        item.setUrl(feedUrl);
+
+        feedItems.add(0, item);
     }
 
     /*private static Map<String, Object> sortByValue(Map<String, Object> unsortMap) {
