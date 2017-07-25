@@ -358,12 +358,20 @@ public class PersonalAccountActivity extends AppCompatActivity
 
     private void updateUser(String name, String email, String contactNo, Gender gender, MaritalStatus maritalStatus, int birth_date, int birth_month, int birth_year) {
         // creating user object
-        User user = new User(name, email, contactNo, gender, maritalStatus, birth_date, birth_month, birth_year);
+        //User user = new User(name, email, contactNo, gender, maritalStatus, birth_date, birth_month, birth_year);
 
         // pushing user to 'users' node using the userId
         FirebaseUser firebaseUser = HomeActivity.mFirebaseAuth.getCurrentUser();
-        mDatabaseRef = HomeActivity.database.getReference("users");
-        mDatabaseRef.child(firebaseUser.getUid()).setValue(user);
+        mDatabaseRef = HomeActivity.database.getReference("users").child(firebaseUser.getUid());
+        //mDatabaseRef.child(firebaseUser.getUid()).setValue(user);
+        mDatabaseRef.child("username").setValue(name);
+        mDatabaseRef.child("email").setValue(email);
+        mDatabaseRef.child("contactNo").setValue(contactNo);
+        mDatabaseRef.child("gender").setValue(gender);
+        mDatabaseRef.child("maritalStatus").setValue(maritalStatus);
+        mDatabaseRef.child("birth_date").setValue(birth_date);
+        mDatabaseRef.child("birth_month").setValue(birth_month);
+        mDatabaseRef.child("birth_year").setValue(birth_year);
     }
 
     /*@SuppressWarnings("deprecation")
