@@ -216,17 +216,17 @@ public class QuestionStreamActivity extends AppCompatActivity
         textView_username_navHeader = (TextView) navigationHeader.findViewById(R.id.textView_username_navHeader);
         textView_email_navHeader = (TextView) navigationHeader.findViewById(R.id.textView_email_navHeader);
 
-        /*navigationHeader.setOnClickListener(new View.OnClickListener() {
+        navigationHeader.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent personalAccountActivity = new Intent(QuestionStreamActivity.this, PersonalAccountActivity.class);
                 startActivity(personalAccountActivity);
             }
-        });*/
+        });
 
         showProgressDialog();
 
-        final String _uid = currentFirebaseUser.getUid();
+        //final String _uid = currentFirebaseUser.getUid();
 
         /*mDatabaseRef.child("users").child(currentFirebaseUser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -289,8 +289,10 @@ public class QuestionStreamActivity extends AppCompatActivity
                 } else {
                    Toast.makeText(QuestionStreamActivity.this, "Failed to get username.", Toast.LENGTH_SHORT).show();
 
-                    _username = "Android Studio";
+                    _username = "Anonymous";
                 }
+
+                textView_username_navHeader.setText(_username);
 
                 hideProgressDialog();
             }
@@ -298,6 +300,7 @@ public class QuestionStreamActivity extends AppCompatActivity
             @Override
             public void onCancelled(DatabaseError error) {
                 Toast.makeText(QuestionStreamActivity.this, "Failed to read value.", Toast.LENGTH_SHORT).show();
+                textView_username_navHeader.setText("Anonymous");
                 hideProgressDialog();
             }
         });
@@ -310,8 +313,10 @@ public class QuestionStreamActivity extends AppCompatActivity
                 } else {
                     Toast.makeText(QuestionStreamActivity.this, "Failed to get email.", Toast.LENGTH_SHORT).show();
 
-                    _emailAddress = "android.studio@android.com";
+                    _emailAddress = "anonymous@android.com";
                 }
+
+                textView_email_navHeader.setText(_emailAddress);
 
                 hideProgressDialog();
             }
@@ -319,6 +324,7 @@ public class QuestionStreamActivity extends AppCompatActivity
             @Override
             public void onCancelled(DatabaseError error) {
                 Toast.makeText(QuestionStreamActivity.this, "Failed to read value.", Toast.LENGTH_SHORT).show();
+                textView_email_navHeader.setText("anonymous@android.com");
                 hideProgressDialog();
             }
         });
@@ -472,7 +478,7 @@ public class QuestionStreamActivity extends AppCompatActivity
 
     }
 
-    private void showLoved(final int position) {
+    /*private void showLoved(final int position) {
         ImageView love_btn = (ImageView) (getViewByPosition(position, listView).findViewById(R.id.imageButton_love));
         love_btn.setImageResource(R.drawable.love_button_not_clicked);
 
@@ -509,7 +515,7 @@ public class QuestionStreamActivity extends AppCompatActivity
                 // Toast.makeText(activity.getApplicationContext(), "Failed to read value.", Toast.LENGTH_SHORT).show();
             }
         });
-    }
+    }*/
 
     @Override
     public void onBackPressed() {
@@ -547,8 +553,12 @@ public class QuestionStreamActivity extends AppCompatActivity
 
             return true;
         } else if (id == R.id.action_exit) {
-            FragmentManager fm = getSupportFragmentManager();
-            fm.popBackStack("QuestionStreamActivity", FragmentManager.POP_BACK_STACK_INCLUSIVE);
+            /*FragmentManager fm = getSupportFragmentManager();
+
+            for(int i = 0; i < fm.getBackStackEntryCount(); ++i) {
+                fm.popBackStack();
+            }
+            fm.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);*/
 
             super.onBackPressed();
 
