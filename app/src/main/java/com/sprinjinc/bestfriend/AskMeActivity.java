@@ -108,13 +108,13 @@ public class AskMeActivity extends AppCompatActivity
         textView_username_navHeader = (TextView) navigationHeader.findViewById(R.id.textView_username_navHeader);
         textView_email_navHeader = (TextView) navigationHeader.findViewById(R.id.textView_email_navHeader);
 
-        /*navigationHeader.setOnClickListener(new View.OnClickListener() {
+        navigationHeader.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent personalAccountActivity = new Intent(AskMeActivity.this, PersonalAccountActivity.class);
                 startActivity(personalAccountActivity);
             }
-        });*/
+        });
 
         showProgressDialog();
 
@@ -126,8 +126,10 @@ public class AskMeActivity extends AppCompatActivity
                 } else {
                     Toast.makeText(AskMeActivity.this, "Failed to get username.", Toast.LENGTH_SHORT).show();
 
-                    _username = "Android Studio";
+                    _username = "Anonymous";
                 }
+
+                textView_username_navHeader.setText(_username);
 
                 hideProgressDialog();
             }
@@ -135,6 +137,7 @@ public class AskMeActivity extends AppCompatActivity
             @Override
             public void onCancelled(DatabaseError error) {
                 Toast.makeText(AskMeActivity.this, "Failed to read value.", Toast.LENGTH_SHORT).show();
+                textView_username_navHeader.setText("Anonymous");
                 hideProgressDialog();
             }
         });
@@ -147,8 +150,10 @@ public class AskMeActivity extends AppCompatActivity
                 } else {
                     Toast.makeText(AskMeActivity.this, "Failed to get email.", Toast.LENGTH_SHORT).show();
 
-                    _emailAddress = "android.studio@android.com";
+                    _emailAddress = "anonymous@android.com";
                 }
+
+                textView_email_navHeader.setText(_emailAddress);
 
                 hideProgressDialog();
             }
@@ -156,6 +161,7 @@ public class AskMeActivity extends AppCompatActivity
             @Override
             public void onCancelled(DatabaseError error) {
                 Toast.makeText(AskMeActivity.this, "Failed to read value.", Toast.LENGTH_SHORT).show();
+                textView_email_navHeader.setText("anonymous@android.com");
                 hideProgressDialog();
             }
         });
@@ -200,6 +206,13 @@ public class AskMeActivity extends AppCompatActivity
         return true;
     }
 
+    public void minimizeApp() {
+        Intent startMain = new Intent(Intent.ACTION_MAIN);
+        startMain.addCategory(Intent.CATEGORY_HOME);
+        startMain.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(startMain);
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -218,10 +231,16 @@ public class AskMeActivity extends AppCompatActivity
 
             return true;
         } else if (id == R.id.action_exit) {
-            FragmentManager fm = getSupportFragmentManager();
-            fm.popBackStack("AskMeActivity", FragmentManager.POP_BACK_STACK_INCLUSIVE);
+            /*FragmentManager fm = getSupportFragmentManager();
 
-            super.onBackPressed();
+            for(int i = 0; i < fm.getBackStackEntryCount(); ++i) {
+                fm.popBackStack();
+            }
+            fm.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+
+            super.onBackPressed();*/
+
+            minimizeApp();
 
             return true;
         }
@@ -240,6 +259,7 @@ public class AskMeActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_question_stream) {
             Intent newsfeedIntent = new Intent(this, QuestionStreamActivity.class);
+            newsfeedIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(newsfeedIntent);
 
         } else if (id == R.id.nav_about) {
