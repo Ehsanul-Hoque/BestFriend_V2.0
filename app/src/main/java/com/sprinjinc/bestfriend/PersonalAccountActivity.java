@@ -3,7 +3,10 @@ package com.sprinjinc.bestfriend;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -146,7 +149,27 @@ public class PersonalAccountActivity extends AppCompatActivity
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
-                User user = dataSnapshot.getValue(User.class);
+                if (dataSnapshot.exists()) {
+                    _username = dataSnapshot.child("username").getValue().toString();
+                    _emailAddress = dataSnapshot.child("email").getValue().toString();
+                    _contactNo = dataSnapshot.child("contactNo").getValue().toString();
+                    _gender = Gender.valueOf(dataSnapshot.child("gender").getValue().toString());
+                    _marital_status = MaritalStatus.valueOf(dataSnapshot.child("maritalStatus").getValue().toString());
+                    _birth_date = Integer.parseInt(dataSnapshot.child("birth_date").getValue().toString());
+                    _birth_month = Integer.parseInt(dataSnapshot.child("birth_month").getValue().toString());
+                    _birth_year = Integer.parseInt(dataSnapshot.child("birth_year").getValue().toString());
+                } else {
+                    _username = "Anonymous";
+                    _emailAddress = "anonymous@android.com";
+                    _contactNo = "xxxxxxxxxxxxx";
+                    _gender = Gender.MALE;
+                    _marital_status = MaritalStatus.UNMARRIED;
+                    _birth_date = 1;
+                    _birth_month = 1;
+                    _birth_year = 1990;
+                }
+
+                /*User user = dataSnapshot.getValue(User.class);
 
                 _username = user.getUsername();
                 _emailAddress = user.getEmail();
@@ -155,7 +178,7 @@ public class PersonalAccountActivity extends AppCompatActivity
                 _marital_status = user.getMaritalStatus();
                 _birth_date = user.getBirth_date();
                 _birth_month = user.getBirth_month();
-                _birth_year = user.getBirth_year();
+                _birth_year = user.getBirth_year();*/
 
                 editText_username.setText(_username);
                 textView_username_navHeader.setText(_username);
@@ -166,6 +189,10 @@ public class PersonalAccountActivity extends AppCompatActivity
                 mYear = _birth_year;
                 mMonth = _birth_month;
                 mDay = _birth_date;
+
+                // Display the date
+
+                updateDisplay();
 
                 if (_gender == Gender.MALE)
                     ((RadioButton) findViewById(R.id.radioButton_male)).setChecked(true);
@@ -200,10 +227,6 @@ public class PersonalAccountActivity extends AppCompatActivity
 
 
 
-        // Display the date
-
-        updateDisplay();
-
         findViewById(R.id.button_cancel).setOnClickListener(this);
         findViewById(R.id.button_save).setOnClickListener(this);
         findViewById(R.id.editText_accountBirthday).setOnClickListener(this);
@@ -219,8 +242,6 @@ public class PersonalAccountActivity extends AppCompatActivity
                 }
             }
         });
-
-        //updateUser
     }
 
     @Override
@@ -242,6 +263,13 @@ public class PersonalAccountActivity extends AppCompatActivity
         return true;
     }
 
+    public void minimizeApp() {
+        Intent startMain = new Intent(Intent.ACTION_MAIN);
+        startMain.addCategory(Intent.CATEGORY_HOME);
+        startMain.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(startMain);
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -260,10 +288,23 @@ public class PersonalAccountActivity extends AppCompatActivity
 
             return true;
         } else if (id == R.id.action_exit) {
-            FragmentManager fm = getSupportFragmentManager();
-            fm.popBackStack("PersonalAccountActivity", FragmentManager.POP_BACK_STACK_INCLUSIVE);
+            /*FragmentManager fm = getSupportFragmentManager();
 
-            super.onBackPressed();
+            int totalBackStack = fm.getBackStackEntryCount();
+
+            if (fm.getBackStackEntryCount() > 0) {
+                FragmentManager.BackStackEntry first = fm.getBackStackEntryAt(0);
+                fm.popBackStack(first.getId(), FragmentManager.POP_BACK_STACK_INCLUSIVE);
+            }*/
+            //fm.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+
+            /*finish();
+            android.os.Process.killProcess(android.os.Process.myPid());
+            super.onDestroy();*/
+
+            minimizeApp();
+
+            //super.onBackPressed();
 
             return true;
         }
@@ -283,6 +324,7 @@ public class PersonalAccountActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_question_stream) {
             Intent newsfeedIntent = new Intent(this, QuestionStreamActivity.class);
+            newsfeedIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(newsfeedIntent);
 
         } else if (id == R.id.nav_about) {
@@ -375,6 +417,7 @@ public class PersonalAccountActivity extends AppCompatActivity
 
             case R.id.button_cancel:
                 Intent newsfeedIntent = new Intent(this, QuestionStreamActivity.class);
+                newsfeedIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(newsfeedIntent);
 
                 break;
@@ -397,6 +440,7 @@ public class PersonalAccountActivity extends AppCompatActivity
                                     Toast.makeText(PersonalAccountActivity.this, "User profile updated.", Toast.LENGTH_SHORT).show();
 
                                     Intent newsfeedIntent = new Intent(PersonalAccountActivity.this, QuestionStreamActivity.class);
+                                    newsfeedIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                     startActivity(newsfeedIntent);
                                 } else {
                                     Toast.makeText(PersonalAccountActivity.this, "User profile update failed.", Toast.LENGTH_SHORT).show();
